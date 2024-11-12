@@ -3,6 +3,11 @@ import bcrypt from 'bcrypt';
 const { Schema, model } = mongoose;
 const { hash, compare } = bcrypt;
 const userSchema = new Schema({
+    username: {
+        type: String,
+        unique: true,
+        minLength: [2, 'Your username must be at least 2 characters in length']
+    },
     email: {
         type: String,
         // The unique rule only works when the collection is FIRST CREATED
@@ -17,9 +22,9 @@ const userSchema = new Schema({
         minLength: [6, 'Your password must be at least 6 characters in length'],
     },
     // The notes property is going to be an array of note ids from the notes collection
-    notes: [{
+    pets: [{
             type: Schema.Types.ObjectId,
-            ref: 'Note'
+            ref: 'Pet'
         }]
 }, {
     toJSON: {
