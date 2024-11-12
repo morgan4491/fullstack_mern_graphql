@@ -1,0 +1,27 @@
+{
+  "name": "mongodb_overview",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon",
+    "seed": "cd ./server && npm run seed",
+    "build": "tsc",
+    "start": "node ./server/dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@apollo/server": "^4.11.2",
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.7"
+  }
+}
