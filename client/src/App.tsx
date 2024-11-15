@@ -1,9 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
-// import { useState } from 'react'
+import { useStore } from './store';
 
+// Import Components
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ProtectRoute from './components/ProtectRoute';
 
+// Import Pages
 import AuthForm from './pages/AuthForm';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
@@ -13,22 +16,51 @@ import PostForm from './pages/PostForm';
 
 
 function App() {
+  const { state } = useStore()!;
 
   return (
     <>
+
+      {/* This portion covers up the website information until the page is done loading the 'state' (see the index.tsx file and the StoreProvider) */}
+      {state.loading && (
+        <div className="loading-overlay d-flex justify-content-center align-items-center">
+          <h2 className="fw-light">Loading...</h2>
+        </div>
+      )}
+
       <Header />
 
       <main className="flex-fill">
         <Routes>
           <Route path="/" element={<Landing />} />
 
-          <Route path="/register" element={<AuthForm isLogin={false} />} />
-          <Route path="/login" element={<AuthForm isLogin={true} />} />
+          <Route path="/register" element={(
+            <ProtectRoute>
+              <AuthForm isLogin={false} />
+            </ProtectRoute>
+          )} />
+          <Route path="/login" element={(
+            <ProtectRoute>
+              <AuthForm isLogin={true} />
+            </ProtectRoute>
+          )} />
 
-          <Route path="/pet" element={<PetForm />} />
-          <Route path="/post" element={<PostForm />} />
+          <Route path="/pet" element={(
+            <ProtectRoute>
+              <PetForm />
+            </ProtectRoute>
+          )} />
+          <Route path="/post" element={(
+            <ProtectRoute>
+              <PostForm />
+            </ProtectRoute>
+          )} />
 
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={(
+            <ProtectRoute>
+              <Dashboard />
+            </ProtectRoute>
+          )} />
 
 
         </Routes>

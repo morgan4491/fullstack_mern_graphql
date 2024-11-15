@@ -1,7 +1,11 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
+import { useStore } from '../store';
+
 function Header() {
+    const { state } = useStore()!;
+
     return (
         <>
             <Navbar bg="light" data-bs-theme="light">
@@ -10,12 +14,18 @@ function Header() {
                     <Nav className="ms-auto">
                         <Nav.Link as={NavLink} to="/">Home</Nav.Link>
 
-                        <Nav.Link as={NavLink} to="/register">Register</Nav.Link>
-                        <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
+                        {state.user ? (
+                            <>
+                                <Nav.Link as={NavLink} to="/dashboard">Dashboard</Nav.Link>
+                                <Nav.Link as={NavLink} to="/pet">Add Pet</Nav.Link>
+                            </>
+                        ) : (
+                            <>
+                                <Nav.Link as={NavLink} to="/register">Register</Nav.Link>
+                                <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
+                            </>
+                        )}
 
-                        <Nav.Link as={NavLink} to="/dashboard">Dashboard</Nav.Link>
-                        <Nav.Link as={NavLink} to="/pet">Add Pet</Nav.Link>
-                        
                     </Nav>
                 </Container>
             </Navbar>

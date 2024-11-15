@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import { GraphQLError } from 'graphql';
 dotenv.config();
 import User from '../../models/User.js';
 import { errorHandler } from '../helpers/index.js';
@@ -45,7 +46,8 @@ const auth_resolvers = {
                 };
             }
             catch (error) {
-                return errorHandler(error);
+                const errorMessage = errorHandler(error);
+                throw new GraphQLError(errorMessage);
             }
         },
         // Log a user in

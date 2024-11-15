@@ -1,19 +1,11 @@
 import { Button, Container, Form, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import { gql, useMutation } from "@apollo/client";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
 
-const REGISTER_USER = gql`
-    mutation RegisterUser($username: String, $email: String, $password: String) {
-    registerUser(username: $username, email: $email, password: $password) {
-        errors
-        user {
-        _id
-        username
-        }
-    }
-    }
-`;
+import { useStore } from '../store';
+
+import { REGISTER_USER, LOGIN_USER } from "../graphql/mutations";
 
 function AuthForm({ isLogin }: { isLogin: boolean }) {
     const [formData, setFormData] = useState({
@@ -22,7 +14,10 @@ function AuthForm({ isLogin }: { isLogin: boolean }) {
         password: '',
         errorMessage: ''
     });
-    const [registerUser] = useMutation(REGISTER_USER)
+    const [registerUser] = useMutation(REGISTER_USER);
+    const [loginUser] = useMutation(LOGIN_USER);
+    const {setState} = useStore()!;
+    const navigate = useNavigate();
 
     // First you gather the input information from the user
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,17 +32,40 @@ function AuthForm({ isLogin }: { isLogin: boolean }) {
         // This prevents a browser refresh
         event.preventDefault();
 
-        const res = await registerUser({
-            variables: formData
-        })
+        const mutation = isLogin ? loginUser : registerUser;
+        const prop = isLogin ? 'loginUser' : 'registerUser';
 
-        console.log(res);
+        try {
+            const res = await mutation({
+                variables: formData
+            })
+    
+            console.log(res);
+            
+    
+            setState((oldState) => ({
+                ...oldState,
+                user: res.data[prop].user
+            }));
+    
+            navigate('/dashboard');
+        } catch (error: any) {
+            setFormData({
+                ...formData,
+                errorMessage: error.message
+            });
+            
+        }
     };
 
     return (
         <Container>
             <Form onSubmit={handleSubmit} style={{ width: "500px" }} className="mx-auto mt-5">
                 <h2 className="text-center mt-3">{isLogin ? 'Log In' : 'Register'}</h2>
+
+                {formData.errorMessage && (
+                    <p className="text-center text-danger">{formData.errorMessage}</p>
+                )}
 
                 {!isLogin && (
                     <Form.Group className="mb-3" controlId="formBasicUsername">
