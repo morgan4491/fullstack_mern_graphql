@@ -1,23 +1,29 @@
 import { Button, Container, Form, Nav } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useStore } from '../store';
 
 import { REGISTER_USER, LOGIN_USER } from "../graphql/mutations";
 
+const initialFormData = {
+    username: '',
+    email: '',
+    password: '',
+    errorMessage: ''
+};
+
 function AuthForm({ isLogin }: { isLogin: boolean }) {
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        errorMessage: ''
-    });
+    const [formData, setFormData] = useState(initialFormData);
     const [registerUser] = useMutation(REGISTER_USER);
     const [loginUser] = useMutation(LOGIN_USER);
     const {setState} = useStore()!;
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setFormData({...initialFormData});
+    }, [isLogin]);
 
     // First you gather the input information from the user
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,13 +76,13 @@ function AuthForm({ isLogin }: { isLogin: boolean }) {
                 {!isLogin && (
                     <Form.Group className="mb-3" controlId="formBasicUsername">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control name="username" onChange={handleInputChange} autoComplete="username" type="text" placeholder="Enter username" />
+                        <Form.Control name="username" onChange={handleInputChange} value={formData.username} autoComplete="username" type="text" placeholder="Enter username" />
                     </Form.Group>
                 )}
 
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control name="email" onChange={handleInputChange} type="email" placeholder="Enter email" />
+                    <Form.Control name="email" onChange={handleInputChange} value={formData.email} type="email" placeholder="Enter email" />
                     <Form.Text className="text-muted">
                         We'll never share your email with anyone else.
                     </Form.Text>
@@ -84,7 +90,7 @@ function AuthForm({ isLogin }: { isLogin: boolean }) {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control name="password" onChange={handleInputChange} autoComplete="current-password" type="password" placeholder="Password" />
+                    <Form.Control name="password" onChange={handleInputChange} value={formData.password} autoComplete="current-password" type="password" placeholder="Password" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     {isLogin ? (

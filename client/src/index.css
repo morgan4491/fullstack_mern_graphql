@@ -16,8 +16,21 @@ nav a.active:not(.navbar-brand), nav a:hover:not(.navbar-brand) {
     text-decoration: underline;
 }
 
+/* These .dropdown styles make sure a long username doesn't break the boundaries of the dropdown menu */
+.dropdown-menu[data-bs-popper] {
+    max-width: 190px;
+  }
+  
+  .dropdown-menu[data-bs-popper] .dropdown-item-text {
+    word-wrap: break-word !important;
+  }
+
 .landing-hero-image {
     background-image: url(/images/Landing.png);
     background-size: cover;
     min-height: 550px;
+}
+
+.pet-output {
+    grid-template-columns: repeat(3, 1fr);
 }

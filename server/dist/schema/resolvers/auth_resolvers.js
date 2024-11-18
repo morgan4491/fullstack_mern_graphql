@@ -56,15 +56,11 @@ const auth_resolvers = {
                 email: args.email
             });
             if (!user) {
-                return {
-                    errors: ['No user found with that email address']
-                };
+                throw new GraphQLError('No user found with that email address');
             }
             const valid_pass = await user.validatePassword(args.password);
             if (!valid_pass) {
-                return {
-                    errors: ['Password is incorrect']
-                };
+                throw new GraphQLError('Password is incorrect');
             }
             const token = createToken(user._id);
             context.res.cookie('pet_token', token, {
