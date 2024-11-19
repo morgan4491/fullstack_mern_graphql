@@ -31,6 +31,25 @@ nav a.active:not(.navbar-brand), nav a:hover:not(.navbar-brand) {
     min-height: 550px;
 }
 
+.landing-post {
+    position: relative;
+}
+
+/* This styling that uses nth-child(even) to apply the style to every other child of the parent */
+/* .landing-post:nth-child(even) {
+    background: #f6f6f6;
+} */
+
+.landing-post:before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 0;
+    background: #85a3ae;
+    width: 7px;
+    height: 100%;
+}
+
 .pet-output {
     grid-template-columns: repeat(3, 1fr);
 }

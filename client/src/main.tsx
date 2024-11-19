@@ -28,7 +28,7 @@ const link = from([
   new HttpLink({ uri: '/graphql' })
 ]);
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   link,
   cache: new InMemoryCache(),
 });
