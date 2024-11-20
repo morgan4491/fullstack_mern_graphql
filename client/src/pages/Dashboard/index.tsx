@@ -48,7 +48,7 @@ function Dashboard() {
                         <Button
                         variant="secondary"
                         className="me-2"
-                        onClick={() => handleShowPostsModal(pet)}>View Post</Button>
+                        onClick={() => handleShowPostsModal(pet)}>View Posts</Button>
                     </article>
                 ))}
             </section>
