@@ -31,7 +31,7 @@ function Header() {
     return (
         <>
             <Navbar bg="light" data-bs-theme="light">
-                <Container>
+                <Container className="nav-wrap">
                     <Navbar.Brand as={NavLink} to="/">Petstagram</Navbar.Brand>
                     <Nav className="ms-auto">
                         <Nav.Link as={NavLink} to="/">Home</Nav.Link>
