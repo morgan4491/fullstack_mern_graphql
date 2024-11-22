@@ -29,6 +29,11 @@ function ViewPostModal({
                 <Modal.Title>Posts for {selectedPet?.name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+
+                {postData && !postData.getPostsForPet.length && (
+                    <p>No posts have been added.</p>
+                )}
+                
                 {postData && postData.getPostsForPet.map((post: Post) => (
                     <article className="mb-4" key={post._id}>
                         <h5>{post.title}</h5>
