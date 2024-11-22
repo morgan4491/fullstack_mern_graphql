@@ -32,4 +32,4 @@ jobs:
     - name: Run tests
       run: |
         npm test &
-        npxfkill :10000
+        npx fkill :10000
