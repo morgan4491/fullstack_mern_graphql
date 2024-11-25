@@ -119,5 +119,9 @@ describe('Pet App Tests', () => {
 
     // Check that the post contains the title of the post created
     cy.get('.modal-body').contains(postTitle);
+
+    cy.visit('/');
+
+    cy.get('main').contains(postTitle);
   })
 })
