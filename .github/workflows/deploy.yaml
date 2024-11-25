@@ -3,10 +3,10 @@ name: CI
 on:
   pull_request:
     branches:
-      - main    
+      - main
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
 
     env:
@@ -25,9 +25,49 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-
+    
     - name: Run builds
       run: npm run client:build && npm run server:build
 
     - name: Run tests
       run: npm test
+
+  merge:
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Merge pull request
+      uses: actions/github-script@v6
+      with:
+        script: |
+            github.rest.pulls.merge({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            merge_method: 'merge'
+              })
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: merge
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install Render CLI
+      run: npm install -g render-cli
+
+    - name: Deploy to Render
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      run: render deploy --service ${{ secrets.SERVICE_ID }} --branch main
