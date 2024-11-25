@@ -8,7 +8,7 @@ import { authenticate } from './services/auth.js';
 import typeDefs from './schema/typeDefs.js';
 import resolvers from './schema/resolvers.js';
 const app = express();
-const PORT = process.env.PORT || 3333;
+const PORT = Number(process.env.PORT) || 3333;
 const server = new ApolloServer({
     typeDefs,
     resolvers,
